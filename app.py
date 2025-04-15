@@ -13,7 +13,7 @@ def get_gold_price():
         try:
             data = response.json()
             if isinstance(data, list) and len(data) > 0:
-                return data[0].get("price", 0)
+                return float(data[0].get("price", 0))
         except Exception as e:
             st.error(f"❌ Error parsing gold price data: {e}")
     return 0
@@ -26,9 +26,9 @@ def get_usd_to_thb():
         try:
             data = response.json()
             if isinstance(data, list) and len(data) > 0:
-                return data[0].get("price", 0)
+                return float(data[0].get("price", 0))
             elif isinstance(data, dict):
-                return data.get("price", 0)
+                return float(data.get("price", 0))
         except Exception as e:
             st.error(f"❌ Error parsing exchange rate data: {e}")
     return 0
@@ -39,6 +39,10 @@ st.title("💰 Gold Bar Cal.")
 # Fetch live data
 gold_price_oz_usd = get_gold_price()
 usd_to_thb = get_usd_to_thb()
+
+# Debugging - Show live data values
+st.write(f"Fetched Gold Price (USD/OZ): {gold_price_oz_usd}")
+st.write(f"Fetched USD to THB Exchange Rate: {usd_to_thb}")
 
 # Show fetched prices with optional manual override
 st.subheader("📡 Live Market Data")
@@ -52,7 +56,7 @@ budget = st.number_input("Enter your budget in THB", value=0)
 grams_per_oz = 31.1035
 
 # Calculations
-gold_price_per_oz_thb = gold_price_oz_usd * usd_to_thb
+gold_price_per_oz_thb = gold_price_oz_usd * usd_to_thb if gold_price_oz_usd and usd_to_thb else 0
 gold_price_per_gram_thb = gold_price_per_oz_thb / grams_per_oz if gold_price_per_oz_thb else 0
 
 # Budget conversion
