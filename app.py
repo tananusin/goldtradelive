@@ -26,9 +26,9 @@ def get_usd_to_thb():
         try:
             data = response.json()
             if isinstance(data, list) and len(data) > 0:
-                return float(data[0].get("price", 0))
+                return float(data[0].get("bid", 0))  # Use 'bid' as the price
             elif isinstance(data, dict):
-                return float(data.get("price", 0))
+                return float(data.get("bid", 0))  # Use 'bid' as the price
         except Exception as e:
             st.error(f"❌ Error parsing exchange rate data: {e}")
     return 0
