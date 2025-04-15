@@ -40,10 +40,6 @@ st.title("💰 Gold Bar Cal.")
 gold_price_oz_usd = get_gold_price()
 usd_to_thb = get_usd_to_thb()
 
-# Debugging - Show live data values
-st.write(f"Fetched Gold Price (USD/OZ): {gold_price_oz_usd}")
-st.write(f"Fetched USD to THB Exchange Rate: {usd_to_thb}")
-
 # Show fetched prices with optional manual override
 st.subheader("📡 Live Market Data")
 gold_price_oz_usd = st.number_input("Gold spot 99.99% 1 troy oz (USD)", value=gold_price_oz_usd, format="%.2f")
@@ -70,6 +66,8 @@ st.write(f"**99.99% gold:** {budget_per_oz:,.2f} troy oz")
 st.write(f"**99.99% gold:** {budget_per_gram:,.2f} grams")
 
 st.subheader("📈 Reference Prices")
+st.write(f"Fetched Gold Price (USD/OZ): {gold_price_oz_usd}")
+st.write(f"Fetched USD to THB Exchange Rate: {usd_to_thb}")
 st.write(f"**1 troy oz of 99.99% gold =** {gold_price_per_oz_thb:,.0f} THB")
 st.write(f"**1 gram of 99.99% gold =** {gold_price_per_gram_thb:,.0f} THB")
 st.write(f"**1 kg LBMA 99.99% gold =** {gold_price_per_gram_thb*1000:,.0f} THB")
