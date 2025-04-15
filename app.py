@@ -17,13 +17,12 @@ def get_gold_price():
 
 # Get USD to THB exchange rate
 def get_usd_to_thb():
-    url = f"https://financialmodelingprep.com/api/v3/fx?apikey={FMP_API_KEY}"
+    url = f"https://financialmodelingprep.com/api/v3/fx/USDTHB?apikey={FMP_API_KEY}"
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
-        for item in data:
-            if item["ticker"] == "USDTHB":
-                return item["bid"]
+        if isinstance(data, list) and len(data) > 0:
+            return data[0]["price"]  # Use "price" instead of "bid"
     return 0
 
 st.title("💰 Gold Bar Cal.")
