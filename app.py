@@ -3,7 +3,9 @@ import streamlit as st
 import requests
 
 # Set your API key
-FMP_API_KEY = st.secrets["api_keys"]["fmp_api_key"]
+FMP_API_KEY = "VX427w8XiFyN3OBt20FxpzZjAr2MAoRu"
+
+st.write(f"Fetched API: {st.secrets["api_keys"]["fmp_api_key"]:.0f}")
 
 # Get live gold price (XAU/USD)
 def get_gold_price():
