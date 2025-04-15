@@ -48,7 +48,7 @@ st.write(f"Fetched USD to THB Exchange Rate: {usd_to_thb}")
 # usd_to_thb = st.number_input("USD/THB exchange rate", value=usd_to_thb, format="%.2f") # optional manual override
 
 # User Input: Budget
-budget = st.number_input("Enter your budget in THB", value=0)
+budget = st.number_input("Enter your budget in THB", value=0, step=1000)
 
 # Conversion constants
 grams_per_oz = 31.1035
