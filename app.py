@@ -55,20 +55,26 @@ budget = st.number_input("Enter your budget in THB", value=0, step=1000)
 
 # Conversion constants
 grams_per_oz = 31.1035
+grams_per_baht = 15.244
+purity_965 = 0.965
 
 # Calculations
 gold_price_per_oz_thb = gold_price_oz_usd * usd_to_thb if gold_price_oz_usd and usd_to_thb else 0
 gold_price_per_gram_thb = gold_price_per_oz_thb / grams_per_oz if gold_price_per_oz_thb else 0
+gold_price_1baht_thb = gold_price_per_gram_thb * grams_per_baht * purity_965
 
 # Budget conversion
 budget_per_oz = budget / gold_price_per_oz_thb if gold_price_per_oz_thb else 0
 budget_per_gram = budget / gold_price_per_gram_thb if gold_price_per_gram_thb else 0
+budget_per_baht = budget / gold_price_1baht_thb
 
 # Outputs
 st.write(f"**99.99% gold:** {budget_per_oz:,.2f} troy oz")
 st.write(f"**99.99% gold:** {budget_per_gram:,.2f} grams")
+st.write(f"**96.50% gold:** {budget_per_baht:,.2f} บาท")
 
 st.subheader("📈 Reference Prices")
 st.write(f"**1 troy oz of 99.99% gold =** {gold_price_per_oz_thb:,.0f} THB")
 st.write(f"**1 gram of 99.99% gold =** {gold_price_per_gram_thb:,.0f} THB")
 st.write(f"**1 kg LBMA 99.99% gold =** {gold_price_per_gram_thb*1000:,.0f} THB")
+st.write(f"**1 บาท 96.50% gold =** {gold_price_1baht_thb:,.0f} THB (by weight)")
