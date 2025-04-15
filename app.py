@@ -42,10 +42,13 @@ usd_to_thb = get_usd_to_thb()
 
 # Show fetched prices
 st.subheader("📡 Live Market Data")
-st.write(f"Fetched Gold Price (USD/OZ): {gold_price_oz_usd}")
-st.write(f"Fetched USD to THB Exchange Rate: {usd_to_thb}")
+st.write(f"Fetched Gold Price (USD/OZ): {gold_price_oz_usd:.2f}")
+st.write(f"Fetched USD to THB Exchange Rate: {usd_to_thb:.2f}")
 # gold_price_oz_usd = st.number_input("Gold spot 99.99% 1 troy oz (USD)", value=gold_price_oz_usd, format="%.2f") # optional manual override
 # usd_to_thb = st.number_input("USD/THB exchange rate", value=usd_to_thb, format="%.2f") # optional manual override
+
+# Budget
+st.subheader("📊 Budget Breakdown")
 
 # User Input: Budget
 budget = st.number_input("Enter your budget in THB", value=0, step=1000)
@@ -62,8 +65,6 @@ budget_per_oz = budget / gold_price_per_oz_thb if gold_price_per_oz_thb else 0
 budget_per_gram = budget / gold_price_per_gram_thb if gold_price_per_gram_thb else 0
 
 # Outputs
-st.subheader("📊 Budget Breakdown")
-st.write(f"**Budget:** {budget:,.0f} THB")
 st.write(f"**99.99% gold:** {budget_per_oz:,.2f} troy oz")
 st.write(f"**99.99% gold:** {budget_per_gram:,.2f} grams")
 
