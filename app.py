@@ -6,13 +6,25 @@ import requests
 FMP_API_KEY = "VX427w8XiFyN3OBt20FxpzZjAr2MAoRu"
 
 # Get live gold price (XAU/USD)
+def get_gold_price():
+    url = f"https://financialmodelingprep.com/api/v3/quote/XAUUSD?apikey={FMP_API_KEY}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        try:
+            data = response.json()
+            if isinstance(data, list) and len(data) > 0:
+                return data[0].get("price", 0)
+        except Exception as e:
+            st.error(f"❌ Error parsing gold price data: {e}")
+    return 0
+
+# Get USD to THB exchange rate
 def get_usd_to_thb():
     url = f"https://financialmodelingprep.com/api/v3/fx/USDTHB?apikey={FMP_API_KEY}"
     response = requests.get(url)
     if response.status_code == 200:
         try:
             data = response.json()
-            # Some FMP endpoints return a dict instead of a list
             if isinstance(data, list) and len(data) > 0:
                 return data[0].get("price", 0)
             elif isinstance(data, dict):
@@ -21,26 +33,17 @@ def get_usd_to_thb():
             st.error(f"❌ Error parsing exchange rate data: {e}")
     return 0
 
-# Get USD to THB exchange rate
-def get_usd_to_thb():
-    url = f"https://financialmodelingprep.com/api/v3/fx/USDTHB?apikey={FMP_API_KEY}"
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        if isinstance(data, list) and len(data) > 0:
-            return data[0]["price"]  # Use "price" instead of "bid"
-    return 0
-
+# App title
 st.title("💰 Gold Bar Cal.")
 
 # Fetch live data
 gold_price_oz_usd = get_gold_price()
 usd_to_thb = get_usd_to_thb()
 
-# Show fetched prices (optional: allow editing)
+# Show fetched prices with optional manual override
 st.subheader("📡 Live Market Data")
-gold_price_oz_usd = st.number_input("Gold spot 99.99% 1 troy oz (USD)", value=gold_price_oz_usd)
-usd_to_thb = st.number_input("USD/THB exchange rate", value=usd_to_thb)
+gold_price_oz_usd = st.number_input("Gold spot 99.99% 1 troy oz (USD)", value=gold_price_oz_usd, format="%.2f")
+usd_to_thb = st.number_input("USD/THB exchange rate", value=usd_to_thb, format="%.2f")
 
 # User Input: Budget
 budget = st.number_input("Enter your budget in THB", value=0)
@@ -50,7 +53,7 @@ grams_per_oz = 31.1035
 
 # Calculations
 gold_price_per_oz_thb = gold_price_oz_usd * usd_to_thb
-gold_price_per_gram_thb = gold_price_per_oz_thb / grams_per_oz
+gold_price_per_gram_thb = gold_price_per_oz_thb / grams_per_oz if gold_price_per_oz_thb else 0
 
 # Budget conversion
 budget_per_oz = budget / gold_price_per_oz_thb if gold_price_per_oz_thb else 0
