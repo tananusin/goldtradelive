@@ -6,13 +6,19 @@ import requests
 FMP_API_KEY = "VX427w8XiFyN3OBt20FxpzZjAr2MAoRu"
 
 # Get live gold price (XAU/USD)
-def get_gold_price():
-    url = f"https://financialmodelingprep.com/api/v3/quote/XAUUSD?apikey={FMP_API_KEY}"
+def get_usd_to_thb():
+    url = f"https://financialmodelingprep.com/api/v3/fx/USDTHB?apikey={FMP_API_KEY}"
     response = requests.get(url)
     if response.status_code == 200:
-        data = response.json()
-        if data and isinstance(data, list):
-            return data[0]["price"]
+        try:
+            data = response.json()
+            # Some FMP endpoints return a dict instead of a list
+            if isinstance(data, list) and len(data) > 0:
+                return data[0].get("price", 0)
+            elif isinstance(data, dict):
+                return data.get("price", 0)
+        except Exception as e:
+            st.error(f"❌ Error parsing exchange rate data: {e}")
     return 0
 
 # Get USD to THB exchange rate
