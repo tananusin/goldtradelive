@@ -42,7 +42,7 @@ usd_to_thb = get_usd_to_thb()
 
 # Show fetched prices
 st.subheader("📡 Live Market Data")
-st.write(f"Fetched Gold Price (USD/OZ): {gold_price_oz_usd:.2f}")
+st.write(f"Fetched Gold Price (USD/OZ): {gold_price_oz_usd:,.0f}")
 st.write(f"Fetched USD to THB Exchange Rate: {usd_to_thb:.2f}")
 # gold_price_oz_usd = st.number_input("Gold spot 99.99% 1 troy oz (USD)", value=gold_price_oz_usd, format="%.2f") # optional manual override
 # usd_to_thb = st.number_input("USD/THB exchange rate", value=usd_to_thb, format="%.2f") # optional manual override
