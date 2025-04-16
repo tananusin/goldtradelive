@@ -1,44 +1,21 @@
 #Goldbartrading
 import streamlit as st
-import requests
-
-# Set your API key
-FMP_API_KEY = st.secrets["api_keys"]["fmp_api_key"]
-
-# Get live gold price (XAU/USD)
-def get_gold_price():
-    url = f"https://financialmodelingprep.com/api/v3/quote/XAUUSD?apikey={FMP_API_KEY}"
-    response = requests.get(url)
-    if response.status_code == 200:
-        try:
-            data = response.json()
-            if isinstance(data, list) and len(data) > 0:
-                return float(data[0].get("price", 0))
-        except Exception as e:
-            st.error(f"❌ Error parsing gold price data: {e}")
-    return 0
-
-# Get USD to THB exchange rate
-def get_usd_to_thb():
-    url = f"https://financialmodelingprep.com/api/v3/fx/USDTHB?apikey={FMP_API_KEY}"
-    response = requests.get(url)
-    if response.status_code == 200:
-        try:
-            data = response.json()
-            if isinstance(data, list) and len(data) > 0:
-                return float(data[0].get("bid", 0))  # Use 'bid' as the price
-            elif isinstance(data, dict):
-                return float(data.get("bid", 0))  # Use 'bid' as the price
-        except Exception as e:
-            st.error(f"❌ Error parsing exchange rate data: {e}")
-    return 0
+from fmp_api import get_gold_price, get_usd_to_thb
 
 # App title
 st.title("💰 Gold Bar Cal.")
 
 # Fetch live data
-gold_price_oz_usd = get_gold_price()
-usd_to_thb = get_usd_to_thb()
+gold_price_oz_usd = get_gold_price(FMP_API_KEY)
+usd_to_thb = get_usd_to_thb(FMP_API_KEY)
+
+# Handle errors (returned as strings)
+if isinstance(gold_price_oz_usd, str):
+    st.error(gold_price_oz_usd)
+    gold_price_oz_usd = 0
+if isinstance(usd_to_thb, str):
+    st.error(usd_to_thb)
+    usd_to_thb = 0
 
 # Show fetched prices
 st.subheader("📡 Live Market Data")
@@ -59,13 +36,13 @@ grams_per_baht = 15.244
 purity_965 = 0.965
 
 # Calculations
-gold_price_per_oz_thb = gold_price_oz_usd * usd_to_thb if gold_price_oz_usd and usd_to_thb else 0
-gold_price_per_gram_thb = gold_price_per_oz_thb / grams_per_oz if gold_price_per_oz_thb else 0
+gold_price_per_oz_thb = gold_price_oz_usd * usd_to_thb
+gold_price_per_gram_thb = gold_price_per_oz_thb / grams_per_oz
 gold_price_1baht_thb = gold_price_per_gram_thb * grams_per_baht * purity_965
 
 # Budget conversion
-budget_per_oz = budget / gold_price_per_oz_thb if gold_price_per_oz_thb else 0
-budget_per_gram = budget / gold_price_per_gram_thb if gold_price_per_gram_thb else 0
+budget_per_oz = budget / gold_price_per_oz_thb
+budget_per_gram = budget / gold_price_per_gram_thb
 budget_per_baht = budget / gold_price_1baht_thb
 
 # Outputs
