@@ -1,3 +1,4 @@
+#app.py
 #Goldbartrading
 import streamlit as st
 from fmp_api import get_gold_price, get_usd_to_thb
