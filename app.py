@@ -7,6 +7,7 @@ from fmp_api import get_gold_price, get_usd_to_thb
 st.title("💰 Gold Bar Cal.")
 
 # Fetch live data
+FMP_API_KEY = st.secrets["api_keys"]["fmp_api_key"]
 gold_price_oz_usd = get_gold_price(FMP_API_KEY)
 usd_to_thb = get_usd_to_thb(FMP_API_KEY)
 
